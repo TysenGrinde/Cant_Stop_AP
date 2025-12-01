@@ -14,3 +14,20 @@ C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\obj\Debug\net8.0-win
 C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.pdb
 C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.genruntimeconfig.cache
 C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\obj\Debug\net8.0-windows\ref\CantStopGameUI.dll
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\bin\Debug\net8.0-windows\CantStopGameUI.exe
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\bin\Debug\net8.0-windows\CantStopGameUI.deps.json
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\bin\Debug\net8.0-windows\CantStopGameUI.runtimeconfig.json
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\bin\Debug\net8.0-windows\CantStopGameUI.dll
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\bin\Debug\net8.0-windows\CantStopGameUI.pdb
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.Form1.resources
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.csproj.GenerateResource.cache
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.AssemblyInfoInputs.cache
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.AssemblyInfo.cs
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.csproj.CoreCompileInputs.cache
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.sourcelink.json
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.dll
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-windows\refint\CantStopGameUI.dll
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.pdb
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.genruntimeconfig.cache
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-windows\ref\CantStopGameUI.dll

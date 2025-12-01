@@ -1,0 +1,118 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\tysen\\Documents\\GitHub\\Cant_Stop_AP\\CantStopGameUI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{7B19115C-61A3-46D6-B373-334DBBE4D8AE}|CantStopGameUI.csproj|c:\\users\\tysen\\documents\\github\\cant_stop_ap\\cantstopgameui\\cantstopgame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B19115C-61A3-46D6-B373-334DBBE4D8AE}|CantStopGameUI.csproj|solutionrelative:cantstopgame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B19115C-61A3-46D6-B373-334DBBE4D8AE}|CantStopGameUI.csproj|c:\\users\\tysen\\documents\\github\\cant_stop_ap\\cantstopgameui\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B19115C-61A3-46D6-B373-334DBBE4D8AE}|CantStopGameUI.csproj|solutionrelative:form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B19115C-61A3-46D6-B373-334DBBE4D8AE}|CantStopGameUI.csproj|c:\\users\\tysen\\documents\\github\\cant_stop_ap\\cantstopgameui\\automatedplayers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B19115C-61A3-46D6-B373-334DBBE4D8AE}|CantStopGameUI.csproj|solutionrelative:automatedplayers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B19115C-61A3-46D6-B373-334DBBE4D8AE}|CantStopGameUI.csproj|c:\\users\\tysen\\documents\\github\\cant_stop_ap\\cantstopgameui\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{7B19115C-61A3-46D6-B373-334DBBE4D8AE}|CantStopGameUI.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7B19115C-61A3-46D6-B373-334DBBE4D8AE}|CantStopGameUI.csproj|c:\\users\\tysen\\documents\\github\\cant_stop_ap\\cantstopgameui\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7B19115C-61A3-46D6-B373-334DBBE4D8AE}|CantStopGameUI.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AutomatedPlayers.cs",
+              "DocumentMoniker": "C:\\Users\\tysen\\Documents\\GitHub\\Cant_Stop_AP\\CantStopGameUI\\AutomatedPlayers.cs",
+              "RelativeDocumentMoniker": "AutomatedPlayers.cs",
+              "ToolTip": "C:\\Users\\tysen\\Documents\\GitHub\\Cant_Stop_AP\\CantStopGameUI\\AutomatedPlayers.cs",
+              "RelativeToolTip": "AutomatedPlayers.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAKkAAAB1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T05:37:33.754Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Form1.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\tysen\\Documents\\GitHub\\Cant_Stop_AP\\CantStopGameUI\\Form1.cs",
+              "RelativeDocumentMoniker": "Form1.cs",
+              "ToolTip": "C:\\Users\\tysen\\Documents\\GitHub\\Cant_Stop_AP\\CantStopGameUI\\Form1.cs [Design]",
+              "RelativeToolTip": "Form1.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T05:20:47.735Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Form1.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\tysen\\Documents\\GitHub\\Cant_Stop_AP\\CantStopGameUI\\Form1.Designer.cs",
+              "RelativeDocumentMoniker": "Form1.Designer.cs",
+              "ToolTip": "C:\\Users\\tysen\\Documents\\GitHub\\Cant_Stop_AP\\CantStopGameUI\\Form1.Designer.cs",
+              "RelativeToolTip": "Form1.Designer.cs",
+              "ViewState": "AgIAAH4AAAAAAAAAAAAowIoAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T05:20:47.801Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "C:\\Users\\tysen\\Documents\\GitHub\\Cant_Stop_AP\\CantStopGameUI\\Form1.cs",
+              "RelativeDocumentMoniker": "Form1.cs",
+              "ToolTip": "C:\\Users\\tysen\\Documents\\GitHub\\Cant_Stop_AP\\CantStopGameUI\\Form1.cs",
+              "RelativeToolTip": "Form1.cs",
+              "ViewState": "AgIAANgAAAAAAAAAAAAnwOcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T05:20:47.805Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CantStopGame.cs",
+              "DocumentMoniker": "C:\\Users\\tysen\\Documents\\GitHub\\Cant_Stop_AP\\CantStopGameUI\\CantStopGame.cs",
+              "RelativeDocumentMoniker": "CantStopGame.cs",
+              "ToolTip": "C:\\Users\\tysen\\Documents\\GitHub\\Cant_Stop_AP\\CantStopGameUI\\CantStopGame.cs",
+              "RelativeToolTip": "CantStopGame.cs",
+              "ViewState": "AgIAAK4AAAAAAAAAAIAwwLsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-01T05:20:47.807Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

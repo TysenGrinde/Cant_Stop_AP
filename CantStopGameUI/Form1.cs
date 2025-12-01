@@ -1,7 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading.Tasks;
+
 
 namespace CantStopGameUI
 {
@@ -9,32 +11,202 @@ namespace CantStopGameUI
     {
         private CantStopGame? _game;
         private Label[,]? _boardLabels; // [playerIndex, columnIndex]
+        private System.Collections.Generic.List<IAutomatedPlayer?> _playerControllers = new System.Collections.Generic.List<IAutomatedPlayer?>();
 
         public Form1()
         {
             InitializeComponent();
         }
 
+        private async Task MaybeRunAutomatedTurnAsync()
+        {
+            if (_game == null) return;
+            if (_playerControllers.Count == 0) return;
+
+            while (true)
+            {
+                if (_game == null) return;
+
+                var controller = _playerControllers[_game.CurrentPlayer];
+                if (controller == null)
+                {
+                    // Next player is human – stop the automatic chain.
+                    return;
+                }
+
+                // Disable human controls while any AI is playing
+                btnRoll.Visible = false;
+                btnStop.Visible = false;
+                btnApplyPair.Enabled = false;
+
+                UpdateCurrentPlayerUI();
+
+                if (controller is BaseAutomatedPlayer baseAi)
+                    baseAi.OnTurnStart(_game);
+
+                // Play exactly one full turn for this AI
+                bool gameOver = await RunAutomatedTurnAsync(controller);
+                if (gameOver)
+                    return;
+
+                // At this point, the game logic (HandleBustAndAdvance / StopAndCommit)
+                // has already advanced _game.CurrentPlayer to the next player.
+                // The while loop repeats and checks if that next player is also an AI.
+            }
+        }
+
+
+
+
+        private async Task<bool> RunAutomatedTurnAsync(IAutomatedPlayer controller)
+        {
+            if (_game == null) return true; // treat as game ended
+
+            while (true)
+            {
+                // === Roll ===
+                var roll = _game.Roll();
+
+                if (controller is BaseAutomatedPlayer baseAi)
+                    baseAi.OnRoll(_game, roll);
+
+                lblDice.Text = $"Dice: {roll.Dice[0]} {roll.Dice[1]} {roll.Dice[2]} {roll.Dice[3]}";
+
+                lstPairs.Items.Clear();
+                for (int i = 0; i < roll.ValidPairs.Count; i++)
+                {
+                    var p = roll.ValidPairs[i];
+                    lstPairs.Items.Add($"{i + 1}: ({p.sum1}, {p.sum2})");
+                }
+
+                UpdateBoardUI();
+                pnlBoardVisual.Invalidate();
+
+                // 1 second pause so you can see the roll + current board
+                await Task.Delay(1000);
+
+                // === Bust on roll ===
+                if (roll.IsBust)
+                {
+                    _game.HandleBustAndAdvance();
+                    UpdateCurrentPlayerUI();
+                    UpdateBoardUI();
+                    pnlBoardVisual.Invalidate();
+
+                    await Task.Delay(1000);
+
+                    // Turn over, game continues
+                    return false;
+                }
+
+                // === Choose and apply pair ===
+                var move = controller.ChooseMove(_game, roll);
+
+                if (move == null || move.PairIndex < 0 || move.PairIndex >= roll.ValidPairs.Count)
+                {
+                    // Treat invalid move as "stop immediately"
+                    var endResultInvalid = _game.StopAndCommit();
+                    UpdateBoardUI();
+                    pnlBoardVisual.Invalidate();
+
+                    await Task.Delay(1000);
+
+                    if (endResultInvalid.GameWon)
+                    {
+                        MessageBox.Show($"{_game.PlayerNames[endResultInvalid.WinnerIndex]} wins!");
+                        return true; // game over
+                    }
+
+                    UpdateCurrentPlayerUI();
+                    return false; // turn over, game continues
+                }
+
+                var applyResult = _game.ApplyPairChoice(move.PairIndex);
+                UpdateBoardUI();
+                pnlBoardVisual.Invalidate();
+
+                // pause after moving climbers
+                await Task.Delay(1000);
+
+                // === Bust from chosen pair ===
+                if (!applyResult.AppliedAny && applyResult.Bust)
+                {
+                    _game.HandleBustAndAdvance();
+                    UpdateCurrentPlayerUI();
+                    UpdateBoardUI();
+                    pnlBoardVisual.Invalidate();
+
+                    await Task.Delay(1000);
+
+                    return false; // turn over, game continues
+                }
+
+                lstPairs.Items.Clear();
+
+                // === Stop after this move ===
+                if (move.StopAfter)
+                {
+                    var endResult = _game.StopAndCommit();
+                    UpdateBoardUI();
+                    pnlBoardVisual.Invalidate();
+
+                    await Task.Delay(1000);
+
+                    if (endResult.GameWon)
+                    {
+                        MessageBox.Show($"{_game.PlayerNames[endResult.WinnerIndex]} wins!");
+                        return true; // game over
+                    }
+
+                    UpdateCurrentPlayerUI();
+                    return false; // turn over, game continues
+                }
+
+                // Otherwise AI wants to keep rolling -> while(true) continues, and
+                // you'll see another roll + 1-second pause.
+            }
+        }
+
         // ------------------ Start Game ------------------
 
-        private void btnStartGame_Click(object sender, EventArgs e)
+        private async void btnStartGame_Click(object sender, EventArgs e)
         {
-            var names = new List<string>();
+            var finalNames = new System.Collections.Generic.List<string>();
+            _playerControllers.Clear();
+
+            // 1) Human players from txtPlayers (one per line)
             foreach (var line in txtPlayers.Lines)
             {
                 var name = line.Trim();
                 if (!string.IsNullOrEmpty(name))
-                    names.Add(name);
+                {
+                    finalNames.Add(name);
+                    _playerControllers.Add(null); // null => human
+                }
             }
 
-            if (names.Count < 2 || names.Count > 4)
+            // 2) Automated players from lstAutomatedPlayers
+            foreach (var item in lstAutomatedPlayers.SelectedItems)
             {
-                MessageBox.Show("Enter between 2 and 4 player names (one per line).");
+                string aiName = item.ToString() ?? "";
+                if (string.IsNullOrWhiteSpace(aiName))
+                    continue;
+
+                var ai = AutomatedPlayerFactory.Create(aiName);
+                finalNames.Add(ai.DisplayName);
+                _playerControllers.Add(ai);
+            }
+
+            // Now validate total players (2–4)
+            if (finalNames.Count < 2 || finalNames.Count > 4)
+            {
+                MessageBox.Show("Total players (humans + automated) must be between 2 and 4.");
                 return;
             }
 
-            _game = new CantStopGame(names);
-            SetupBoardTable(names.Count);
+            // Create game with combined player list
+            _game = new CantStopGame(finalNames);
+            SetupBoardTable(finalNames.Count);
             UpdateBoardUI();
             UpdateCurrentPlayerUI();
             pnlBoardVisual.Invalidate();
@@ -42,14 +214,18 @@ namespace CantStopGameUI
             lstPairs.Items.Clear();
             lblDice.Text = "Dice: ";
 
-            // NEW: hide Start Game once the game begins
+            // Hide Start Game once the game begins
             btnStartGame.Visible = false;
 
-            // Make sure gameplay buttons are in a good initial state
+            // Gameplay buttons initial state
             btnRoll.Visible = true;
             btnStop.Visible = true;
             btnApplyPair.Enabled = false;
+
+            // In case the first player is automated, let them start immediately
+            await MaybeRunAutomatedTurnAsync();
         }
+
 
 
         // ------------------ Board Setup & Update ------------------
@@ -180,7 +356,7 @@ namespace CantStopGameUI
 
         // ------------------ Buttons: Roll / Use Pair / Stop ------------------
 
-        private void btnRoll_Click(object sender, EventArgs e)
+        private async void btnRoll_Click(object sender, EventArgs e)
         {
             if (_game == null) return;
 
@@ -197,24 +373,22 @@ namespace CantStopGameUI
 
             if (roll.IsBust)
             {
-                // Immediate bust: next player's turn
                 MessageBox.Show("Bust! No valid pairs. Turn over.");
                 _game.HandleBustAndAdvance();
                 UpdateCurrentPlayerUI();
                 UpdateBoardUI();
                 pnlBoardVisual.Invalidate();
-
-                // Buttons back to "ready to roll"
+                btnApplyPair.Enabled = false;
                 btnRoll.Visible = true;
                 btnStop.Visible = true;
-                btnApplyPair.Enabled = false;
+
+                // After a human busts, see if next player is an AI
+                await MaybeRunAutomatedTurnAsync();
             }
             else
             {
-                // You have valid pairs to choose from:
+                // Valid pairs → normal human flow: hide Roll/Stop, etc.
                 btnApplyPair.Enabled = true;
-
-                // Hide Roll and Stop until a pair is used or you bust
                 btnRoll.Visible = false;
                 btnStop.Visible = false;
             }
@@ -222,7 +396,7 @@ namespace CantStopGameUI
 
 
 
-        private void btnApplyPair_Click(object sender, EventArgs e)
+        private async void btnApplyPair_Click(object sender, EventArgs e)
         {
             if (_game == null) return;
 
@@ -273,24 +447,22 @@ namespace CantStopGameUI
                 UpdateBoardUI();
                 pnlBoardVisual.Invalidate();
 
-                // Bust -> next player's turn, buttons back to normal
                 btnRoll.Visible = true;
                 btnStop.Visible = true;
                 btnApplyPair.Enabled = false;
                 lstPairs.Items.Clear();
+
+                await MaybeRunAutomatedTurnAsync();
             }
             else
             {
-                // Successful move this turn: show updated board with temporary climbers
+                // Successful move this turn...
                 UpdateBoardUI();
                 pnlBoardVisual.Invalidate();
 
-                // After using a pair from this roll, we clear the list.
-                // Player must now choose to Roll or Stop again.
                 lstPairs.Items.Clear();
                 btnApplyPair.Enabled = false;
 
-                // Bring Roll and Stop back
                 btnRoll.Visible = true;
                 btnStop.Visible = true;
             }
@@ -298,7 +470,7 @@ namespace CantStopGameUI
 
 
 
-        private void btnStop_Click(object sender, EventArgs e)
+        private async void btnStop_Click(object sender, EventArgs e)
         {
             if (_game == null) return;
 
@@ -324,6 +496,7 @@ namespace CantStopGameUI
             else
             {
                 UpdateCurrentPlayerUI();
+                await MaybeRunAutomatedTurnAsync();
             }
         }
 
