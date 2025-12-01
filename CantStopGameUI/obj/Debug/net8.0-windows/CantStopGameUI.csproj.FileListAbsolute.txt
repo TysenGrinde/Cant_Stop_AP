@@ -1,0 +1,16 @@
+C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\bin\Debug\net8.0-windows\CantStopGameUI.exe
+C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\bin\Debug\net8.0-windows\CantStopGameUI.deps.json
+C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\bin\Debug\net8.0-windows\CantStopGameUI.runtimeconfig.json
+C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\bin\Debug\net8.0-windows\CantStopGameUI.dll
+C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\bin\Debug\net8.0-windows\CantStopGameUI.pdb
+C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.Form1.resources
+C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.csproj.GenerateResource.cache
+C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.AssemblyInfoInputs.cache
+C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.AssemblyInfo.cs
+C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.csproj.CoreCompileInputs.cache
+C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.dll
+C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\obj\Debug\net8.0-windows\refint\CantStopGameUI.dll
+C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.pdb
+C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.genruntimeconfig.cache
+C:\Users\DSU Student\Documents\FantasyTrack2\CantStopGameUI\obj\Debug\net8.0-windows\ref\CantStopGameUI.dll
