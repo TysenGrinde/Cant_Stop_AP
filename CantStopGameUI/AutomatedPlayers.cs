@@ -395,27 +395,59 @@ namespace CantStopGameUI
                 return score;
             });
 
-            // Stopping logic.
-            bool stop = false;
-
-            // Cowardly: stop when 1 roll away from completing a track
+            // Can we claim (finish) a new track right now if we stop?
+            bool canClaimTrackNow = false;
             for (int col = 0; col < CantStopGame.NumColumns; col++)
             {
-                if ((ColumnHasCampForCurrent(game, col) || ColumnHasClimberForCurrent(game, col)) &&
-                    DistanceToFinish(game, col) <= 1)
+                // Only care about tracks we don't already own
+                if (game.ColumnOwner[col] == game.CurrentPlayer)
+                    continue;
+
+                if (ColumnHasCampForCurrent(game, col) || ColumnHasClimberForCurrent(game, col))
                 {
-                    stop = true;
-                    break;
+                    // DistanceToFinish <= 0 means our climber is already at or above the top
+                    if (DistanceToFinish(game, col) <= 0)
+                    {
+                        canClaimTrackNow = true;
+                        break;
+                    }
                 }
             }
 
-            // Roll for 4 turns, or until all climbers in outer tracks.
-            if (!lastByMoreThanOne && RollCountThisTurn >= 4 && !allClimbersOuter)
-                stop = true;
+            // Stopping logic.
+            bool stop = false;
 
-            // FOMO overrides: if last by >1 track, never stop early (until bust / finish).
-            if (lastByMoreThanOne)
-                stop = false;
+            // Base cowardly / pacing logic when NOT in FOMO mode.
+            if (!lastByMoreThanOne)
+            {
+                // Cowardly: stop when 1 roll away from completing a track,
+                // BUT only on active columns (with climbers), not just any camp.
+                for (int col = 0; col < CantStopGame.NumColumns; col++)
+                {
+                    if (ColumnHasClimberForCurrent(game, col) &&
+                        DistanceToFinish(game, col) <= 1)
+                    {
+                        stop = true;
+                        break;
+                    }
+                }
+
+
+                // Roll for 4 turns, or until all climbers in outer tracks.
+                if (!stop && RollCountThisTurn >= 4 && !allClimbersOuter)
+                    stop = true;
+
+                // If we can actually claim a track right now, we definitely stop.
+                if (canClaimTrackNow)
+                    stop = true;
+            }
+            else
+            {
+                // FOMO: last by >1 track
+                // Roll until bust OR until we can finish a (new) track this turn.
+                stop = canClaimTrackNow;
+            }
+
 
             return new AutomatedMove
             {

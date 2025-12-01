@@ -80,13 +80,21 @@ namespace CantStopGameUI
             {
                 if (col < 2 || col > 12)
                     return false;
+
                 int idx = col - 2;
+
+                // Can't play in a column owned by someone else
                 if (ColumnOwner[idx] != -1 && ColumnOwner[idx] != CurrentPlayer)
                     return false;
-                if (PlayerPositions[CurrentPlayer, idx] >= ColumnHeights[idx])
+
+                // *** NEW: include this-turn progress so we can't go past the top ***
+                int currentHeight = PlayerPositions[CurrentPlayer, idx] + TurnProgress[idx];
+                if (currentHeight >= ColumnHeights[idx])
                     return false;
+
                 return true;
             }
+
 
             bool IsActive(int col)
             {
@@ -151,9 +159,13 @@ namespace CantStopGameUI
             {
                 if (col < 0 || col >= NumColumns)
                     return false;
+
                 if (ColumnOwner[col] != -1 && ColumnOwner[col] != CurrentPlayer)
                     return false;
-                if (PlayerPositions[CurrentPlayer, col] >= ColumnHeights[col])
+
+                // *** NEW: include this-turn progress so we can't go past the top ***
+                int currentHeight = PlayerPositions[CurrentPlayer, col] + TurnProgress[col];
+                if (currentHeight >= ColumnHeights[col])
                     return false;
 
                 bool alreadyActive = ActiveColumns.Contains(col);
@@ -163,8 +175,10 @@ namespace CantStopGameUI
                 TurnProgress[col]++;
                 if (!alreadyActive)
                     ActiveColumns.Add(col);
+
                 return true;
             }
+
 
             bool move1 = TryMove(col1);
             bool move2 = TryMove(col2);

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CantStopGameUI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+781975540c9f7efe604f1b4a269e0c7fb3d1f792")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9920e6202ecac4a4d6f09c142e62bb31acfc8bf0")]
 [assembly: System.Reflection.AssemblyProductAttribute("CantStopGameUI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CantStopGameUI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

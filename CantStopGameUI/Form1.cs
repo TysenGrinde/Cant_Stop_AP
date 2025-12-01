@@ -561,7 +561,7 @@ namespace CantStopGameUI
             // Player colors
             Color[] playerColors = { Color.Red, Color.Blue, Color.Green, Color.Orange };
 
-            // Draw permanent + temporary positions
+            // Draw camps (saved positions) and climbers (this turn)
             for (int p = 0; p < _game.PlayerNames.Count; p++)
             {
                 Color color = playerColors[p % playerColors.Length];
@@ -569,43 +569,58 @@ namespace CantStopGameUI
                 for (int col = 0; col < cols; col++)
                 {
                     int height = CantStopGame.ColumnHeights[col];
-
-                    int basePos = _game.PlayerPositions[p, col]; // permanent
-                    int temp = 0;
-                    if (p == _game.CurrentPlayer && _game.TurnProgress != null)
-                    {
-                        temp = _game.TurnProgress[col];
-                    }
-
-                    int total = basePos + temp;
-                    if (total <= 0) continue;
-                    if (total > height) total = height;
-
-                    // Position index -> cell (0-based from bottom)
-                    int stepIndex = total - 1;
-
                     int colX = marginLeft + col * columnSpacing;
-                    int y = pnlBoardVisual.Height - marginBottom - (stepIndex + 1) * cellHeight;
+
+                    int basePos = _game.PlayerPositions[p, col]; // permanent "camp"
+                    int temp = (p == _game.CurrentPlayer && _game.TurnProgress != null)
+                                    ? _game.TurnProgress[col]
+                                    : 0;
 
                     // Slight horizontal offset per player so they don't overlap exactly
                     int offset = (p - _game.PlayerNames.Count / 2) * 4;
 
-                    var rect = new Rectangle(
-                        colX + cellWidth / 2 - 6 + offset,
-                        y + 2,
-                        12,
-                        cellHeight - 6);
-
-                    using (var brush = new SolidBrush(color))
+                    // 1) Draw permanent camp for ALL players (colored token)
+                    if (basePos > 0)
                     {
-                        g.FillEllipse(brush, rect);
+                        int campStep = Math.Min(basePos, height) - 1;
+                        int campY = pnlBoardVisual.Height - marginBottom - (campStep + 1) * cellHeight;
+
+                        var campRect = new Rectangle(
+                            colX + cellWidth / 2 - 6 + offset,
+                            campY + 2,
+                            12,
+                            cellHeight - 6);
+
+                        using (var brush = new SolidBrush(color))
+                        {
+                            g.FillEllipse(brush, campRect);
+                        }
+                        g.DrawEllipse(Pens.Black, campRect);
                     }
 
-                    // Outline
-                    g.DrawEllipse(Pens.Black, rect);
+                    // 2) Draw climber ONLY for current player (black token at camp + temp)
+                    if (p == _game.CurrentPlayer && temp > 0)
+                    {
+                        int climberPos = basePos + temp;
+                        if (climberPos > height) climberPos = height;
+
+                        int climberStep = climberPos - 1;
+                        int climberY = pnlBoardVisual.Height - marginBottom - (climberStep + 1) * cellHeight;
+
+                        var climberRect = new Rectangle(
+                            colX + cellWidth / 2 - 6 + offset,
+                            climberY + 2,
+                            12,
+                            cellHeight - 6);
+
+                        using (var brush = new SolidBrush(Color.Black))
+                        {
+                            g.FillEllipse(brush, climberRect);
+                        }
+                        g.DrawEllipse(Pens.Black, climberRect);
+                    }
                 }
             }
         }
-
     }
 }
