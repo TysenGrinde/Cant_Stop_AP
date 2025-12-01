@@ -1,0 +1,11 @@
+Fix the AI player rule bugs
+
+Add a “move history” box for testing and general gameplay
+
+Add a “fast simulation” mode that can rapidly simulate full AI-vs-AI games (possibly multiple games in parallel)
+
+Gather stats for card-vs-card matchups and any other metrics you think would be useful
+
+Add the cards into the UI
+
+Make the UI look closer to the actual board game
