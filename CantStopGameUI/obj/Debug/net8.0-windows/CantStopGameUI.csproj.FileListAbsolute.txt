@@ -31,3 +31,4 @@ C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-win
 C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.pdb
 C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.genruntimeconfig.cache
 C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-windows\ref\CantStopGameUI.dll
+C:\Users\tysen\Documents\GitHub\Cant_Stop_AP\CantStopGameUI\obj\Debug\net8.0-windows\CantStopGameUI.Properties.Resources.resources

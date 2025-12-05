@@ -41,13 +41,16 @@
             pnlBoardVisual = new Panel();
             lstAutomatedPlayers = new ListBox();
             lblAutomatedPlayers = new Label();
+            numSimGames = new NumericUpDown();
+            btnFastSim = new Button();
+            txtSimResults = new TextBox();
+            ((System.ComponentModel.ISupportInitialize)numSimGames).BeginInit();
             SuspendLayout();
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(8, 5);
-            label1.Margin = new Padding(2, 0, 2, 0);
+            label1.Location = new Point(10, 10);
             label1.Name = "label1";
             label1.Size = new Size(120, 15);
             label1.TabIndex = 0;
@@ -55,40 +58,65 @@
             // 
             // txtPlayers
             // 
-            txtPlayers.Location = new Point(8, 22);
-            txtPlayers.Margin = new Padding(2);
+            txtPlayers.Location = new Point(10, 30);
             txtPlayers.Multiline = true;
             txtPlayers.Name = "txtPlayers";
             txtPlayers.ScrollBars = ScrollBars.Vertical;
-            txtPlayers.Size = new Size(106, 50);
+            txtPlayers.Size = new Size(150, 80);
             txtPlayers.TabIndex = 1;
             // 
             // btnStartGame
             // 
-            btnStartGame.Location = new Point(118, 24);
-            btnStartGame.Margin = new Padding(2);
+            btnStartGame.Location = new Point(10, 115);
             btnStartGame.Name = "btnStartGame";
-            btnStartGame.Size = new Size(78, 20);
+            btnStartGame.Size = new Size(150, 23);
             btnStartGame.TabIndex = 2;
             btnStartGame.Text = "Start Game";
             btnStartGame.UseVisualStyleBackColor = true;
             btnStartGame.Click += btnStartGame_Click;
             // 
+            // lblAutomatedPlayers
+            // 
+            lblAutomatedPlayers.AutoSize = true;
+            lblAutomatedPlayers.Location = new Point(180, 10);
+            lblAutomatedPlayers.Name = "lblAutomatedPlayers";
+            lblAutomatedPlayers.Size = new Size(132, 15);
+            lblAutomatedPlayers.TabIndex = 12;
+            lblAutomatedPlayers.Text = "Add Automated Players";
+            // 
+            // lstAutomatedPlayers
+            // 
+            lstAutomatedPlayers.FormattingEnabled = true;
+            lstAutomatedPlayers.ItemHeight = 15;
+            lstAutomatedPlayers.Items.AddRange(new object[]
+            {
+        "Fear Of Heights!",
+        "Team2",
+        "Average Intelligence",
+        "Slice & Dice",
+        "Six Shooter",
+        "Courage the Cowardly Dog"
+            });
+            lstAutomatedPlayers.Location = new Point(180, 30);
+            lstAutomatedPlayers.Name = "lstAutomatedPlayers";
+            lstAutomatedPlayers.SelectionMode = SelectionMode.MultiSimple;
+            lstAutomatedPlayers.Size = new Size(160, 109);
+            lstAutomatedPlayers.TabIndex = 11;
+            lstAutomatedPlayers.SelectedIndexChanged += lstAutomatedPlayers_SelectedIndexChanged;
+            // 
             // lblCurrentPlayer
             // 
             lblCurrentPlayer.AutoSize = true;
-            lblCurrentPlayer.Location = new Point(216, 5);
-            lblCurrentPlayer.Margin = new Padding(2, 0, 2, 0);
+            lblCurrentPlayer.Location = new Point(360, 10);
             lblCurrentPlayer.Name = "lblCurrentPlayer";
             lblCurrentPlayer.Size = new Size(88, 15);
             lblCurrentPlayer.TabIndex = 3;
-            lblCurrentPlayer.Text = "Current Player: ";
+            lblCurrentPlayer.Text = "Current Player:";
             // 
             // lblDice
             // 
             lblDice.AutoSize = true;
-            lblDice.Location = new Point(216, 24);
-            lblDice.Margin = new Padding(2, 0, 2, 0);
+            lblDice.Location = new Point(360, 30);
             lblDice.Name = "lblDice";
             lblDice.Size = new Size(36, 15);
             lblDice.TabIndex = 4;
@@ -98,97 +126,106 @@
             // 
             lstPairs.FormattingEnabled = true;
             lstPairs.ItemHeight = 15;
-            lstPairs.Location = new Point(216, 41);
-            lstPairs.Margin = new Padding(2);
+            lstPairs.Location = new Point(360, 50);
             lstPairs.Name = "lstPairs";
-            lstPairs.Size = new Size(127, 79);
+            lstPairs.Size = new Size(180, 94);
             lstPairs.TabIndex = 5;
             // 
             // btnRoll
             // 
-            btnRoll.Location = new Point(346, 24);
-            btnRoll.Margin = new Padding(2);
+            btnRoll.Location = new Point(560, 28);
             btnRoll.Name = "btnRoll";
-            btnRoll.Size = new Size(78, 20);
+            btnRoll.Size = new Size(80, 23);
             btnRoll.TabIndex = 6;
             btnRoll.Text = "Roll";
             btnRoll.UseVisualStyleBackColor = true;
             btnRoll.Click += btnRoll_Click;
             // 
-            // btnApplyPair
-            // 
-            btnApplyPair.Location = new Point(216, 122);
-            btnApplyPair.Margin = new Padding(2);
-            btnApplyPair.Name = "btnApplyPair";
-            btnApplyPair.Size = new Size(78, 20);
-            btnApplyPair.TabIndex = 7;
-            btnApplyPair.Text = "Use Pair";
-            btnApplyPair.UseVisualStyleBackColor = true;
-            btnApplyPair.Click += btnApplyPair_Click;
-            // 
             // btnStop
             // 
-            btnStop.Location = new Point(346, 48);
-            btnStop.Margin = new Padding(2);
+            btnStop.Location = new Point(560, 57);
             btnStop.Name = "btnStop";
-            btnStop.Size = new Size(78, 20);
+            btnStop.Size = new Size(80, 23);
             btnStop.TabIndex = 8;
             btnStop.Text = "Stop";
             btnStop.UseVisualStyleBackColor = true;
             btnStop.Click += btnStop_Click;
             // 
+            // btnApplyPair
+            // 
+            btnApplyPair.Location = new Point(560, 86);
+            btnApplyPair.Name = "btnApplyPair";
+            btnApplyPair.Size = new Size(80, 23);
+            btnApplyPair.TabIndex = 7;
+            btnApplyPair.Text = "Use Pair";
+            btnApplyPair.UseVisualStyleBackColor = true;
+            btnApplyPair.Click += btnApplyPair_Click;
+            // 
             // tblBoard
             // 
-            tblBoard.AutoSize = true;
-            tblBoard.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            tblBoard.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-            tblBoard.ColumnCount = 2;
-            tblBoard.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tblBoard.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
-            tblBoard.Location = new Point(8, 190);
-            tblBoard.Margin = new Padding(2);
+            tblBoard.ColumnCount = 1;
+            tblBoard.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tblBoard.Location = new Point(10, 145);
             tblBoard.Name = "tblBoard";
-            tblBoard.RowCount = 2;
-            tblBoard.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tblBoard.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tblBoard.Size = new Size(3, 3);
+            tblBoard.RowCount = 1;
+            tblBoard.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tblBoard.Size = new Size(600, 120);
             tblBoard.TabIndex = 9;
+            tblBoard.Anchor = AnchorStyles.Top | AnchorStyles.Left;
             // 
             // pnlBoardVisual
             // 
             pnlBoardVisual.BackColor = Color.White;
-            pnlBoardVisual.Location = new Point(8, 322);
+            pnlBoardVisual.Location = new Point(8, 190);
             pnlBoardVisual.Margin = new Padding(2);
             pnlBoardVisual.Name = "pnlBoardVisual";
-            pnlBoardVisual.Size = new Size(490, 285);
+            pnlBoardVisual.Size = new Size(1100, 800);
+            pnlBoardVisual.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             pnlBoardVisual.TabIndex = 10;
             pnlBoardVisual.Paint += pnlBoardVisual_Paint;
             // 
-            // lstAutomatedPlayers
+            // txtSimResults
             // 
-            lstAutomatedPlayers.FormattingEnabled = true;
-            lstAutomatedPlayers.ItemHeight = 15;
-            lstAutomatedPlayers.Items.AddRange(new object[] { "Fear Of Heights!", "Team2", "Average Intelligence", "Slice & Dice", "Six Shooter", "Courage the Cowardly Dog" });
-            lstAutomatedPlayers.Location = new Point(8, 96);
-            lstAutomatedPlayers.Name = "lstAutomatedPlayers";
-            lstAutomatedPlayers.SelectionMode = SelectionMode.MultiSimple;
-            lstAutomatedPlayers.Size = new Size(151, 94);
-            lstAutomatedPlayers.TabIndex = 11;
+            txtSimResults.Location = new Point(1128, 190);
+            txtSimResults.Multiline = true;
+            txtSimResults.Name = "txtSimResults";
+            txtSimResults.ReadOnly = true;
+            txtSimResults.ScrollBars = ScrollBars.Vertical;
+            txtSimResults.Size = new Size(700, 800);
+            txtSimResults.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            txtSimResults.TabIndex = 15;
+            //
+            // numSimGames
             // 
-            // lblAutomatedPlayers
+            numSimGames.Location = new Point(1320, 150);
+            numSimGames.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+            numSimGames.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            numSimGames.Name = "numSimGames";
+            numSimGames.Size = new Size(120, 23);
+            numSimGames.TabIndex = 13;
+            numSimGames.Value = new decimal(new int[] { 100, 0, 0, 0 });
+            numSimGames.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            //
+            // btnFastSim
             // 
-            lblAutomatedPlayers.AutoSize = true;
-            lblAutomatedPlayers.Location = new Point(8, 78);
-            lblAutomatedPlayers.Name = "lblAutomatedPlayers";
-            lblAutomatedPlayers.Size = new Size(132, 15);
-            lblAutomatedPlayers.TabIndex = 12;
-            lblAutomatedPlayers.Text = "Add Automated Players";
+            btnFastSim.Location = new Point(1128, 150);
+            btnFastSim.Name = "btnFastSim";
+            btnFastSim.Size = new Size(120, 23);
+            btnFastSim.TabIndex = 14;
+            btnFastSim.Text = "Run Fast Sim";
+            btnFastSim.UseVisualStyleBackColor = true;
+            btnFastSim.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnFastSim.Click += btnFastSim_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1329, 614);
+            ClientSize = new Size(1920, 1080);
+            StartPosition = FormStartPosition.CenterScreen;
+            Controls.Add(txtSimResults);
+            Controls.Add(btnFastSim);
+            Controls.Add(numSimGames);
             Controls.Add(lblAutomatedPlayers);
             Controls.Add(lstAutomatedPlayers);
             Controls.Add(pnlBoardVisual);
@@ -202,12 +239,13 @@
             Controls.Add(btnStartGame);
             Controls.Add(txtPlayers);
             Controls.Add(label1);
-            Margin = new Padding(2);
             Name = "Form1";
             Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)numSimGames).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
+
 
         #endregion
 
@@ -224,5 +262,8 @@
         private Panel pnlBoardVisual;
         private ListBox lstAutomatedPlayers;
         private Label lblAutomatedPlayers;
+        private NumericUpDown numSimGames;
+        private Button btnFastSim;
+        private TextBox txtSimResults;
     }
 }

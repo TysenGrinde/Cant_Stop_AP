@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Drawing.Imaging;
 
 
 namespace CantStopGameUI
@@ -11,12 +13,21 @@ namespace CantStopGameUI
     {
         private CantStopGame? _game;
         private Label[,]? _boardLabels; // [playerIndex, columnIndex]
+        private readonly Dictionary<string, Image> _cardImages = new();
         private System.Collections.Generic.List<IAutomatedPlayer?> _playerControllers = new System.Collections.Generic.List<IAutomatedPlayer?>();
 
         public Form1()
         {
             InitializeComponent();
+
+            _cardImages["Fear Of Heights!"] = Properties.Resources.FearOfHeights;
+            _cardImages["Team2"] = Properties.Resources.Team2;
+            _cardImages["Average Intelligence"] = Properties.Resources.Average_Intelligence;
+            _cardImages["Slice & Dice"] = Properties.Resources.SliceandDice;
+            _cardImages["Six Shooter"] = Properties.Resources.SixShooter;
+            _cardImages["Courage the Cowardly Dog"] = Properties.Resources.CourageTheCowardlyDog;
         }
+
 
         private async Task MaybeRunAutomatedTurnAsync()
         {
@@ -503,17 +514,94 @@ namespace CantStopGameUI
 
         private void pnlBoardVisual_Paint(object sender, PaintEventArgs e)
         {
-            if (_game == null) return;
-
             var g = e.Graphics;
             g.Clear(Color.White);
 
+            // --- First: draw AI cards on the right, even if no game is running ---
+
+            // --- 1) Draw AI cards on the right side, even if there is no game yet ---
+
+            if (_cardImages.Count > 0)
+            {
+                // Names of currently-selected automated players
+                var selectedNames = new HashSet<string>(
+                    lstAutomatedPlayers.SelectedItems
+                        .Cast<object>()
+                        .Select(o => o?.ToString() ?? string.Empty)
+                        .Where(s => !string.IsNullOrWhiteSpace(s)));
+
+                int cardWidth = 90;
+                int cardHeight = 140;
+                int padding = 8;
+
+                int columns = 2; // << two columns
+                int totalWidth = columns * cardWidth + (columns + 1) * padding;
+
+                // Base X so the whole 2-column block hugs the right edge
+                int xBase = pnlBoardVisual.Width - totalWidth;
+                if (xBase < 0) xBase = 0; // just in case panel is very narrow
+
+                using (var fadedAttributes = new ImageAttributes())
+                {
+                    float alpha = 0.35f; // 35% opacity for non-selected cards
+                    var cm = new ColorMatrix(new float[][]
+                    {
+            new float[] {1, 0, 0, 0, 0},
+            new float[] {0, 1, 0, 0, 0},
+            new float[] {0, 0, 1, 0, 0},
+            new float[] {0, 0, 0, alpha, 0},
+            new float[] {0, 0, 0, 0, 1}
+                    });
+                    fadedAttributes.SetColorMatrix(cm);
+
+                    int index = 0;
+                    foreach (var kvp in _cardImages)
+                    {
+                        var img = kvp.Value;
+                        if (img == null) continue;
+
+                        int colIndex = index % columns;      // 0 or 1
+                        int rowIndex = index / columns;      // 0,1,2,...
+
+                        int x = xBase + padding + colIndex * (cardWidth + padding);
+                        int y = padding + rowIndex * (cardHeight + padding);
+
+                        var dest = new Rectangle(x, y, cardWidth, cardHeight);
+                        bool isSelected = selectedNames.Contains(kvp.Key);
+
+                        if (isSelected)
+                        {
+                            // Full opacity
+                            g.DrawImage(img, dest);
+                        }
+                        else
+                        {
+                            // Faded
+                            g.DrawImage(
+                                img,
+                                dest,
+                                0, 0, img.Width, img.Height,
+                                GraphicsUnit.Pixel,
+                                fadedAttributes);
+                        }
+
+                        index++;
+                    }
+                }
+            }
+
+            // If there is no game yet, we’re done after drawing cards.
+            if (_game == null)
+                return;
+
+            // --- Now draw the actual board (mountains + tokens) ---
+
             int cols = CantStopGame.NumColumns;
 
-            // Layout constants
+            // Layout constants for the board portion (leave room on the right for cards)
             int marginLeft = 40;
             int marginBottom = 30;
-            int columnSpacing = 40;
+            int columnSpacing = 35;  // a bit tighter so the board fits left of the cards
             int cellHeight = 18;
             int cellWidth = 30;
 
@@ -525,18 +613,19 @@ namespace CantStopGameUI
 
                 int colX = marginLeft + col * columnSpacing;
 
-                // Draw column label (2..12) at bottom
+                // Column label at bottom
                 using (var font = new Font("Segoe UI", 8, FontStyle.Bold))
                 using (var brush = new SolidBrush(Color.Black))
                 using (var sf = new StringFormat { Alignment = StringAlignment.Center })
                 {
                     g.DrawString(sum.ToString(), font, brush,
-                                 colX + cellWidth / 2, pnlBoardVisual.Height - marginBottom + 2, sf);
+                                 colX + cellWidth / 2,
+                                 pnlBoardVisual.Height - marginBottom + 2,
+                                 sf);
                 }
 
                 int owner = _game.ColumnOwner[col];
 
-                // Draw the stack of "spaces"
                 for (int step = 0; step < height; step++)
                 {
                     int x = colX;
@@ -546,7 +635,7 @@ namespace CantStopGameUI
 
                     if (owner != -1)
                     {
-                        // Column is owned: fill the entire column green
+                        // Column is owned: fill the whole column green
                         using (var fillBrush = new SolidBrush(Color.LightGreen))
                         {
                             g.FillRectangle(fillBrush, rect);
@@ -555,7 +644,6 @@ namespace CantStopGameUI
 
                     g.DrawRectangle(Pens.Gray, rect);
                 }
-
             }
 
             // Player colors
@@ -576,10 +664,10 @@ namespace CantStopGameUI
                                     ? _game.TurnProgress[col]
                                     : 0;
 
-                    // Slight horizontal offset per player so they don't overlap exactly
+                    // Slight horizontal offset per player to avoid exact overlap
                     int offset = (p - _game.PlayerNames.Count / 2) * 4;
 
-                    // 1) Draw permanent camp for ALL players (colored token)
+                    // 1) Permanent camp token (colored)
                     if (basePos > 0)
                     {
                         int campStep = Math.Min(basePos, height) - 1;
@@ -598,7 +686,7 @@ namespace CantStopGameUI
                         g.DrawEllipse(Pens.Black, campRect);
                     }
 
-                    // 2) Draw climber ONLY for current player (black token at camp + temp)
+                    // 2) Climber token (black) for current player only
                     if (p == _game.CurrentPlayer && temp > 0)
                     {
                         int climberPos = basePos + temp;
@@ -620,6 +708,90 @@ namespace CantStopGameUI
                         g.DrawEllipse(Pens.Black, climberRect);
                     }
                 }
+            }
+        }
+
+
+        private void lstAutomatedPlayers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            pnlBoardVisual.Invalidate(); // redraw board + cards with new selection
+        }
+
+        private async void btnFastSim_Click(object sender, EventArgs e)
+        {
+            // Use the automated-player list box for lineup selection
+            var aiNames = lstAutomatedPlayers.SelectedItems
+                .Cast<object>()
+                .Select(item => item?.ToString())
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .ToList();
+
+            if (aiNames.Count < 2 || aiNames.Count > 4)
+            {
+                MessageBox.Show("For fast simulation, select 2–4 automated players in the list.");
+                return;
+            }
+
+            int gameCount = (int)numSimGames.Value;
+
+            btnFastSim.Enabled = false;
+            txtSimResults.Clear();
+            txtSimResults.AppendText($"Running {gameCount} games with:\r\n");
+            foreach (var name in aiNames)
+                txtSimResults.AppendText($" - {name}\r\n");
+            txtSimResults.AppendText("\r\n");
+
+            try
+            {
+                // Run the simulations off the UI thread
+                var result = await Task.Run(() => FastSimulator.RunManyGames(aiNames, gameCount));
+
+                txtSimResults.AppendText($"Finished.\r\n");
+                txtSimResults.AppendText($"Total games: {result.TotalGames}\r\n");
+                txtSimResults.AppendText($"Average game length (turns): {result.AvgGameLength:F2}\r\n\r\n");
+
+                foreach (var cs in result.PerCard)
+                {
+                    txtSimResults.AppendText($"{cs.Name}\r\n");
+
+                    // Win stats
+                    txtSimResults.AppendText(
+                        $"  Games: {cs.GamesPlayed}, Wins: {cs.GamesWon}, WinRate: {cs.WinRate:P1}\r\n");
+
+                    // Rolls / busts
+                    txtSimResults.AppendText(
+                        $"  Avg rolls / turn: {cs.AvgRollsPerTurn:F2}, Bust rate / roll: {cs.BustRatePerRoll:P1}\r\n");
+
+                    // Column wins (only show columns that were actually claimed)
+                    txtSimResults.AppendText("  Columns claimed: ");
+                    bool first = true;
+                    for (int col = 0; col < CantStopGame.NumColumns; col++)
+                    {
+                        int count = cs.ColumnsClaimed[col];
+                        if (count > 0)
+                        {
+                            if (!first)
+                                txtSimResults.AppendText(", ");
+                            int sum = col + 2; // col 0 => sum 2, etc.
+                            txtSimResults.AppendText($"{sum}:{count}");
+                            first = false;
+                        }
+                    }
+                    if (first)
+                    {
+                        txtSimResults.AppendText("none");
+                    }
+
+                    txtSimResults.AppendText("\r\n\r\n");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Simulation error: " + ex.Message);
+            }
+            finally
+            {
+                btnFastSim.Enabled = true;
             }
         }
     }
